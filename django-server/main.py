@@ -1,12 +1,13 @@
 from bard import Human, Economy, Environment, Labor, Traffic, Society
 
 print("""법률 카테고리를 선택하세요.
-      1. 인권 
-      2. 환경
-      3. 노동
-      4. 경제
-      5. 사회
-      6. 교통
+      1. 인권법
+      2. 환경법
+      3. 노동법
+      4. 경제법
+      5. 사회법
+      6. 교통법
+      7. 법률 안건 작성
       """)
 
 user_choice = int(input("번호 입력: "))
@@ -46,3 +47,21 @@ elif user_choice == 6:
     user_input = input("Prompt: ")
     response = Traffic(user_situation=user_input)
     print("response :\n {}".format(response))
+
+elif user_choice == 7:
+    print('법률 안건을 작성합니다.')
+    input1 = input("날짜: ")
+    input2 = input("사용자 정보: ")
+    input3 = input("""
+                법률 카테고리
+                1. 인권법
+                2. 환경법
+                3. 노동법
+                4. 경제법
+                5. 사회법
+                6. 교통법 
+                """)
+    input4 = input("안건 주제: ")
+    input5 = input("안건의 내용: ")
+    input6 = input("안건의 예상 효과: ")
+    input7 = input("안건 제안 이유: ")
