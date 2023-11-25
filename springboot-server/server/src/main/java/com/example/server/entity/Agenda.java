@@ -2,10 +2,7 @@ package com.example.server.entity;
 
 import com.example.server.model.RequestAgendaDTO;
 import com.example.server.model.ResponseAgendaDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +25,10 @@ public class Agenda {
     private String detail;
     @CreationTimestamp
     private LocalDateTime createDate;
+    @Enumerated(EnumType.ORDINAL)
+    private State state;
+    // 추천
+    private Long recommend;
 
     public static Agenda from(RequestAgendaDTO dto) {
         return Agenda.builder()
@@ -35,4 +36,8 @@ public class Agenda {
                 .detail(dto.getTitle())
                 .build();
     }
+}
+
+enum State {
+    CHECK, NONE
 }

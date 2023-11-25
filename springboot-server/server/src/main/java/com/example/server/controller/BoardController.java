@@ -45,5 +45,12 @@ public class BoardController {
         return service.insert(dto);
     }
 
+//    유저 권한을 체크하고 권한에 맞는 유저를 React LocalStorage에 저장
+//    학습 후 적용하기
+//    @GetMapping()
+//    public String userCheck(RequestAgendaDTO dto) {
+//        return service.insert(dto);
+//    }
+
 
 }
