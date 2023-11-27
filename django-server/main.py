@@ -50,10 +50,11 @@ elif user_choice == 6:
 
 elif user_choice == 7:
     print('법률 안건을 작성합니다.')
-    input1 = input("날짜: ")
-    input2 = input("사용자 정보: ")
+    input1 = input("안건 발의 연월일: ")
+    input2 = input("발의자: ")
+   
     input3 = input("""
-    법률 카테고리
+    발의안 카테고리
     1. 인권법
     2. 환경법
     3. 노동법
@@ -61,7 +62,8 @@ elif user_choice == 7:
     5. 사회법
     6. 교통법 
     """)
+
     input4 = input("안건 주제: ")
     input5 = input("안건의 내용: ")
-    input6 = input("안건의 예상 효과: ")
-    input7 = input("안건 제안 이유: ")
+    input6 = input("안건 제안 이유: ")
+    input7 = input("안건의 예상 효과: ")
