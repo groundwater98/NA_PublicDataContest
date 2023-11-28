@@ -1,6 +1,7 @@
 import os
 import bardapi
 import config as cfg
+import requests
 
 # BARD API KEY
 os.environ['_BARD_API_KEY'] = cfg.bard_config["api_key"]
@@ -103,3 +104,5 @@ def Traffic(user_situation):
     response = bardapi.core.Bard().get_answer(request)
 
     return response['content']
+
+    
