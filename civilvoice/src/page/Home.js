@@ -1,21 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import {LinearGradient} from "expo-linear-gradient";
-import {theme} from "../color";
+import {theme} from "../../color";
 import { Fontisto } from '@expo/vector-icons';
 
 import React from 'react';
 
-const Main = () => {
+const Home = ({navigation}) => {
 
-    const imagePath = require('../assets/gov.png')
+    const imagePath = require('../../assets/gov.png')
 
     return (
         <LinearGradient
             colors={[theme.skyblue, 'white']}
             style={styles.container}
         >
-            <StatusBar style={"light"}/>
             <View style={styles.maintop}>
                 <TouchableOpacity
                     // 버튼을 클릭하면 Test용 User 계정으로 로그인 하는 버튼
@@ -47,8 +46,8 @@ const Main = () => {
                 </Text>
                 <TouchableOpacity
                     // 버튼을 클릭하면 게시판으로 이동하는 버튼
-                    // onPress={admin}
                     style={styles.mainbtn}
+                    onPress={() => navigation.navigate('Board')}
                 >
                     <Text
                         style={styles.mainbtnText}
@@ -66,7 +65,7 @@ const Main = () => {
                 <TouchableOpacity
                     style={styles.chatIcon}
                     // 버튼을 클릭시 채팅방으로 이동할 수 있도록
-                    // onPress={}
+                    onPress={() => navigation.navigate('Chat')}
                 >
                     <Fontisto
                         name={"comments"}
@@ -138,7 +137,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     govIcon: {
-        marginTop: 130,
+        marginTop: 170,
+        marginRight: 20,
         alignItems:'flex-end',
     },
     govIconStyle: {
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main;
+export default Home;
