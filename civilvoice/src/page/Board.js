@@ -1,10 +1,12 @@
 import React from 'react';
-import {FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
 import Header from "../component/Header";
-import BoardRead from "../component/BoardRead";
 import {useNavigation} from "@react-navigation/native";
+import {Fontisto} from "@expo/vector-icons";
+import BoardRead from "../component/BoardRead";
 
+const SCREEN_WIDTH = Dimensions.get("window").width;
 const Board = () => {
     const navigation = useNavigation();
     const data = [
@@ -28,61 +30,98 @@ const Board = () => {
     return (
         <View style={{flex: 1}}>
             <Header text={"Civil Voice"}></Header>
-            <View style={styles.boardTitle}>
-                <View style={styles.footer}>
-                    <Text style={styles.boardTitleText}>
-                        게시판
-                    </Text>
-                </View>
-            </View>
-            <View style={styles.main}>
-                <FlatList
-                    data={data}
-                    keyExtractor={(_) => _.no}
-                    style={{flex: 1}}
-                    renderItem={({ item }) => {
-                        const { title, like, check } = item;
-                        return (
-                            <BoardRead title={title} like={like} check={check} no={item.no.toString()}/>
-                        )
-                    }}
-                />
-                <View
-                    style={styles.footerContainer}
-                >
-                    <TouchableOpacity
-                        style={styles.footer}
-                        onPress={() => navigation.navigate('Chat')}
-                    >
-                        <Text
-                            style={styles.footerText}
+            <View style={styles.container}>
+                    <View style={styles.mainContainer}>
+                        {/* 상단 영역*/}
+                        <View style={styles.boardTitleContainer}>
+                            <Text style={styles.boardTitleText}>
+                                안건 게시판
+                            </Text>
+                        </View>
+
+                        {/*안건 영역*/}
+                        <FlatList
+                            data={data}
+                            keyExtractor={(_) => _.no}
+                            style={styles.agendaContainer}
+                            renderItem={({ item }) => {
+                                const { title, like, check } = item;
+                                return (
+                                    <BoardRead title={title} like={like} check={check} no={item.no.toString()}/>
+                                )
+                            }}
+                        />
+                        <View
+                            style={styles.footerContainer}
                         >
-                            채팅 시작하기
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                            <TouchableOpacity
+                                style={styles.footer}
+                                onPress={() => navigation.navigate('Chat')}
+                            >
+                                <Text
+                                    style={styles.footerText}
+                                >
+                                    채팅 시작하기
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    main: {
+    container: {
         flex: 11,
-        backgroundColor: "white",
-        paddingHorizontal: 25,
-        // alignItems: "center",
     },
-    boardTitle: {
-        flex: 1,
+    mainContainer: {
+        marginVertical: 30,
+        marginHorizontal: SCREEN_WIDTH*0.05,
+        borderColor: theme.whiteBlue,
+        borderWidth: 2,
+        borderRadius: 20,
         alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "white",
     },
     boardTitleText: {
+        textAlign: "center",
         color: "white",
         fontSize: 20,
         fontWeight: "700",
+    },
+    boardTitleContainer: {
+        marginTop: -20,
+        justifyContent: "center",
+        borderRadius: 20,
+        width: 150,
+        height: 40,
+        backgroundColor: theme.skyblue,
+    },
+    agendaContainer: {
+        marginVertical: 10,
+        width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
+        borderRadius: 20,
+        padding: 5,
+    },
+    bottomBtnContainer: {
+        marginTop: 20,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    bottomBtn: {
+        flexDirection: "row",
+        padding: 10,
+        margin: 10,
+        backgroundColor: "white",
+        borderColor: theme.skyblue,
+        borderWidth: 3,
+        borderRadius: 15,
+    },
+    bottomBtnText: {
+        marginLeft: 3,
+        color: theme.skyblue,
     },
     footerContainer: {
         position: 'absolute',

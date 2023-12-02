@@ -4,9 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Chat from "./src/page/Chat";
-import Board from "./src/page/Board";
 import {StatusBar} from "expo-status-bar";
-import BoardDetail from "./src/component/BoardDetail";
+import BoardDetail from "./src/page/BoardDetail";
+import BoardDetail2 from "./src/page/BoardDetail";
+import Board from "./src/page/Board";
 
 const Stack = createNativeStackNavigator();
 
