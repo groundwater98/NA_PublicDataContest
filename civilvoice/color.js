@@ -1,6 +1,11 @@
+import {Dimensions} from 'react-native';
+
 export const theme = {
     bg: "white",
-    whiteBlue: "#99B7D9",
+    whiteBlue: "#c5d7ee",
     skyblue: "#326EB3",
     darkblue: "#142C47"
 }
+
+export const {maxWidth, maxHeight} = Dimensions.get('screen');
+
