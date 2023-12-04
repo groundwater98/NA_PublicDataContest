@@ -1,165 +1,129 @@
-import React from 'react';
-import {Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {theme} from "../../color";
+import React, {useEffect, useRef, useState} from 'react';
+import {  GiftedChat , SystemMessage } from 'react-native-gifted-chat';
+import {useNavigation, useRoute} from "@react-navigation/native";
 import Header from "../component/Header";
-import {useNavigation} from "@react-navigation/native";
-import {Fontisto} from "@expo/vector-icons";
-import BoardRead from "../component/BoardRead";
+import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {theme} from "../../color";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
-    const navigation = useNavigation();
-    return (
-        <View style={{flex: 1}}>
-            <Header text={"Civil Voice"}></Header>
-            <View style={styles.container}>
-                <View style={styles.mainContainer}>
-                    {/* 상단 영역*/}
-                    <View style={styles.boardTitleContainer}>
-                        <Text style={styles.boardTitleText}>
-                            채팅 카테고리
-                        </Text>
-                    </View>
-                    <View style={{marginTop: 20}}>
-                        <TouchableOpacity
-                        >
-                            <View style={styles.ChatTitleContainer}>
-                                <Text style={styles.ChatTitleText}>안건법</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>환경법</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>노동법</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>경제법</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>사회법</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>교통법</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.ChatTitleContainer}>
-                            <TouchableOpacity
-                            >
-                                <Text style={styles.ChatTitleText}>안건 작성</Text>
-                            </TouchableOpacity>
-                        </View>
 
+    const navigation = useNavigation();
+    const route = useRoute();
+    const [working, setWorking] = useState(true);
+    const [text, setText] = useState("");
+    const [toDos, setToDos] = useState({});
+    const travel = () => setWorking(false);
+    const work = () => setWorking(true);
+    const onChangeText = (payload) => setText(payload);
+
+    const addToDo = () => {
+        if (text === "") {
+            return
+        }
+
+        const newToDos = {
+            ...toDos,
+            [Date.now()]: {text, work: working}
+        }
+
+        setToDos(newToDos);
+        setText("");
+        console.log(newToDos);
+    }
+    const scrollViewRef = useRef();
+
+    useEffect(() => {
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: true });
+        }
+    }, [toDos]);
+
+
+    useEffect(() => {
+        working
+    }, []);
+
+
+    return (
+            <View style={{flex: 1}}>
+                <Header text={"Civil Voice"}></Header>
+                <View style={styles.container}>
+                    {/* 상단 영역*/}
+                    <ScrollView
+                        ref={scrollViewRef}
+                    >
+                        {Object.keys(toDos).map(key =>
+                            <View style={styles.toDo} key={key}>
+                                <View style={styles.toDoTextBackground}>
+                                    <Text style={styles.toDoText}>{toDos[key].text}</Text>
+                                </View>
+                            </View>)}
+                    </ScrollView>
+                    <View style={styles.footerContainer}>
+                        <TextInput
+                            onSubmitEditing={addToDo}
+                            value={text}
+                            onChangeText={onChangeText}
+                            placeholder={"텍스트를 입력해주세요"}
+                            style={styles.input}>
+                        </TextInput>
                     </View>
+
                 </View>
             </View>
-        </View>
-    );
-};
+        );
+    };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 11,
-        justifyContent: "center",
-    },
-    mainContainer: {
-        padding: 30,
-        marginVertical: 30,
-        marginHorizontal: SCREEN_WIDTH*0.05,
-        borderColor: theme.whiteBlue,
-        borderWidth: 2,
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    boardTitleText: {
-        textAlign: "center",
-        color: "white",
-        fontSize: 25,
-        fontWeight: "700",
-    },
-    boardTitleContainer: {
-        marginTop: -20,
-        justifyContent: "center",
-        borderRadius: 20,
-        width: 250,
-        height: 50,
-        backgroundColor: theme.skyblue,
-    },
-    ChatTitleText: {
-        textAlign: "center",
-        color: "black",
-        fontSize: 20,
-        fontWeight: "700",
-    },
-    ChatTitleContainer: {
-        margin: 10,
-        justifyContent: "center",
-        borderRadius: 20,
-        width: 220,
-        height: 50,
-        backgroundColor: theme.whiteBlue,
-    },
-    agendaContainer: {
-        marginVertical: 10,
-        width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
-        borderRadius: 20,
-        padding: 5,
-    },
-    bottomBtnContainer: {
-        marginTop: 20,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    bottomBtn: {
-        flexDirection: "row",
-        padding: 10,
-        margin: 10,
-        backgroundColor: "white",
-        borderColor: theme.skyblue,
-        borderWidth: 3,
-        borderRadius: 15,
-    },
-    bottomBtnText: {
-        marginLeft: 3,
-        color: theme.skyblue,
-    },
-    footerContainer: {
-        position: 'absolute',
-        bottom: 10,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
+    const styles = StyleSheet.create({
+        container: {
+            marginTop: 10,
+            flex: 11,
+            justifyContent: "center",
+        },
+        mainContainer: {
+            flex: 1,
+            padding: 10,
+            backgroundColor: "white",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        footerContainer: {
+            padding: 10,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+            backgroundColor: theme.skyblue,
 
-    },
-    footer: {
-        width: 150,
-        height: 40,
-        backgroundColor: theme.skyblue,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 20,
-    },
-    footerText: {
-        color: "white",
-        fontSize: 20,
-        fontWeight: "700",
-    },
-});
+        },
+        input: {
+            width: SCREEN_WIDTH*0.95,
+            backgroundColor: "white",
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+            borderRadius: 15,
+            fontSize: 18,
+        },
+        toDo: {
+            margin: 5,
+            padding: 5,
+            flexDirection: "row",
+            // *** 여기를 조정해서 AI와 User의 채팅을 구분 ***
+            justifyContent: "flex-end",
+            marginHorizontal: 20,
+        },
+        toDoText: {
+            color: "black",
+            fontSize: 18,
+        },
+        toDoTextBackground: {
+            backgroundColor: theme.whiteBlue,
+            paddingHorizontal: 10, // 좌우 여백 조절
+            paddingVertical: 5,   // 상하 여백 조절
+            borderRadius: 5,
+            alignSelf: 'flex-start', // 텍스트의 길이에 맞게 배경 조절
+        }
+    });
 
 export default Chat;

@@ -65,7 +65,7 @@ const Home = ({navigation}) => {
                 <TouchableOpacity
                     style={styles.chatIcon}
                     // 버튼을 클릭시 채팅방으로 이동할 수 있도록
-                    onPress={() => navigation.navigate('Chat')}
+                    onPress={() => navigation.navigate('Category')}
                 >
                     <Fontisto
                         name={"comments"}

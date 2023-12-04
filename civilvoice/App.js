@@ -3,11 +3,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Chat from "./src/page/Chat";
 import {StatusBar} from "expo-status-bar";
 import BoardDetail from "./src/page/BoardDetail";
-import BoardDetail2 from "./src/page/BoardDetail";
 import Board from "./src/page/Board";
+import Category from "./src/page/Category";
+import CategoryDetail from "./src/page/CategoryDetail";
+import Chat from "./src/page/Chat";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,8 @@ export default function App() {
                     component={Home}
                 />
                 <Stack.Screen
-                    name="Chat"
-                    component={Chat}
+                    name="Category"
+                    component={Category}
                 />
                 <Stack.Screen
                     name="Board"
@@ -37,6 +38,14 @@ export default function App() {
                 <Stack.Screen
                     name="BoardDetail"
                     component={BoardDetail}
+                />
+                <Stack.Screen
+                    name="CategoryDetail"
+                    component={CategoryDetail}
+                />
+                <Stack.Screen
+                    name="Chat"
+                    component={Chat}
                 />
             </Stack.Navigator>
         </NavigationContainer>

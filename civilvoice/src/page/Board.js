@@ -3,7 +3,6 @@ import {Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 import {theme} from "../../color";
 import Header from "../component/Header";
 import {useNavigation} from "@react-navigation/native";
-import {Fontisto} from "@expo/vector-icons";
 import BoardRead from "../component/BoardRead";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -56,7 +55,7 @@ const Board = () => {
                         >
                             <TouchableOpacity
                                 style={styles.footer}
-                                onPress={() => navigation.navigate('Chat')}
+                                onPress={() => navigation.navigate('Category')}
                             >
                                 <Text
                                     style={styles.footerText}
