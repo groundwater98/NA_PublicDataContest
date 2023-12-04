@@ -1,35 +1,56 @@
+import axios from "axios";
 import React, {useEffect, useRef, useState} from 'react';
 import {  GiftedChat , SystemMessage } from 'react-native-gifted-chat';
 import {useNavigation, useRoute} from "@react-navigation/native";
 import Header from "../component/Header";
 import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
+import {error} from "react-native-gifted-chat/lib/logging";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
 
     const navigation = useNavigation();
     const route = useRoute();
-    const [working, setWorking] = useState(true);
     const [text, setText] = useState("");
-    const [toDos, setToDos] = useState({});
-    const travel = () => setWorking(false);
-    const work = () => setWorking(true);
+    const [message, setMessage] = useState({});
     const onChangeText = (payload) => setText(payload);
 
-    const addToDo = () => {
+    const addToDo =  async () => {
         if (text === "") {
             return
         }
 
         const newToDos = {
-            ...toDos,
-            [Date.now()]: {text, work: working}
+            ...message,
+            [Date.now()]: {text, user: true}
         }
 
-        setToDos(newToDos);
+        setMessage(newToDos);
         setText("");
         console.log(newToDos);
+        console.log(text)
+
+        try {
+            const response = await fetch("http://localhost:9000/api/chat/send", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    text: text
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok.");
+            }
+            // Handle success
+            console.log("통신 성공")
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error.message);
+        }
+
     }
     const scrollViewRef = useRef();
 
@@ -37,11 +58,11 @@ const Chat = () => {
         if (scrollViewRef.current) {
             scrollViewRef.current.scrollToEnd({ animated: true });
         }
-    }, [toDos]);
+    }, [message]);
 
 
     useEffect(() => {
-        working
+        message
     }, []);
 
 
@@ -53,10 +74,10 @@ const Chat = () => {
                     <ScrollView
                         ref={scrollViewRef}
                     >
-                        {Object.keys(toDos).map(key =>
-                            <View style={styles.toDo} key={key}>
+                        {Object.keys(message).map(key =>
+                            <View style={{...styles.toDo, justifyContent: message[key].user ? "flex-end" : "flex-start"}} key={key}>
                                 <View style={styles.toDoTextBackground}>
-                                    <Text style={styles.toDoText}>{toDos[key].text}</Text>
+                                    <Text style={styles.toDoText}>{message[key].text}</Text>
                                 </View>
                             </View>)}
                     </ScrollView>
@@ -110,7 +131,7 @@ const Chat = () => {
             padding: 5,
             flexDirection: "row",
             // *** 여기를 조정해서 AI와 User의 채팅을 구분 ***
-            justifyContent: "flex-end",
+            // justifyContent: "flex-end",
             marginHorizontal: 20,
         },
         toDoText: {
