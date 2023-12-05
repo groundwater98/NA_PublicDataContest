@@ -8,5 +8,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestChatDTO {
+
+
     public String text;
+
 }
