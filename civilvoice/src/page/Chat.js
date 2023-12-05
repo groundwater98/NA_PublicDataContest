@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation, useRoute} from "@react-navigation/native";
 import Header from "../component/Header";
-import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Button, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
+import {Fontisto} from "@expo/vector-icons";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
@@ -92,14 +93,30 @@ const Chat = () => {
                             </View>)}
                     </ScrollView>
                     <View style={styles.footerContainer}>
-                        <TextInput
-                            multiline={true}
-                            onSubmitEditing={addToDo}
-                            value={text}
-                            onChangeText={onChangeText}
-                            placeholder={"텍스트를 입력해주세요"}
-                            style={styles.input}>
-                        </TextInput>
+                        <View style={styles.footerContainerBack}>
+                            <View style={styles.textContainer}>
+                                <TextInput
+                                    multiline={true}
+                                    onSubmitEditing={addToDo}
+                                    value={text}
+                                    onChangeText={onChangeText}
+                                    placeholder={"텍스트를 입력해주세요"}
+                                    style={styles.input}>
+                                </TextInput>
+                            </View>
+                            <View>
+                                <TouchableOpacity
+                                    onPress={addToDo}
+                                >
+                                    <Fontisto
+                                        name={"paper-plane"}
+                                        size={20}
+                                        color={theme.skyblue}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
                     </View>
 
                 </View>
@@ -127,15 +144,24 @@ const Chat = () => {
             right: 0,
             alignItems: 'center',
             backgroundColor: theme.skyblue,
-
+            flexDirection: 'row',
         },
-        input: {
-            width: SCREEN_WIDTH*0.95,
+        footerContainerBack: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             backgroundColor: "white",
             paddingVertical: 10,
             paddingHorizontal: 10,
             borderRadius: 15,
             fontSize: 18,
+        },
+        textContainer: {
+            width: SCREEN_WIDTH*0.95,
+            flex: 1
+        },
+        input: {
+            fontSize: 15,
         },
         toDo: {
             margin: 5,
