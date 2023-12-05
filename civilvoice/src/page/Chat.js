@@ -1,11 +1,8 @@
-import axios from "axios";
 import React, {useEffect, useRef, useState} from 'react';
-import {  GiftedChat , SystemMessage } from 'react-native-gifted-chat';
 import {useNavigation, useRoute} from "@react-navigation/native";
 import Header from "../component/Header";
 import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
-import {error} from "react-native-gifted-chat/lib/logging";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
@@ -14,25 +11,17 @@ const Chat = () => {
     const route = useRoute();
     const [text, setText] = useState("");
     const [message, setMessage] = useState({});
+    const [count, setCount] = useState(0);
+
     const onChangeText = (payload) => setText(payload);
 
-    const addToDo =  async () => {
-        if (text === "") {
-            return
-        }
-
-        const newToDos = {
-            ...message,
-            [Date.now()]: {text, user: true}
-        }
-
-        setMessage(newToDos);
-        setText("");
-        console.log(newToDos);
-        console.log(text)
-
+    const addToDo = async () => {
         try {
-            const response = await fetch("http://localhost:9000/api/chat/send", {
+            if (text === "") {
+                return;
+            }
+
+            const response = await fetch("http://192.168.0.12:9000/api/chat/send", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -45,13 +34,34 @@ const Chat = () => {
             if (!response.ok) {
                 throw new Error("Network response was not ok.");
             }
-            // Handle success
-            console.log("통신 성공")
+
+            const responseText = await response.text();
+
+            console.log(text)
+            console.log(responseText)
+
+            // 기존 message 객체의 키 개수를 통해 새로운 count를 계산
+            const newCount = Object.keys(message).length;
+
+            const userMessage = {
+                ...message,
+                [newCount]: { text, user: true }
+            };
+            setMessage(userMessage);
+            setText("");
+            console.log(userMessage)
+
+            const botMessage = {
+                ...userMessage,
+                [newCount + 1]: { text: responseText , user: false }
+            };
+            console.log(userMessage)
+            setMessage(botMessage);
         } catch (error) {
             console.error("There was a problem with the fetch operation:", error.message);
         }
+    };
 
-    }
     const scrollViewRef = useRef();
 
     useEffect(() => {
@@ -83,6 +93,7 @@ const Chat = () => {
                     </ScrollView>
                     <View style={styles.footerContainer}>
                         <TextInput
+                            multiline={true}
                             onSubmitEditing={addToDo}
                             value={text}
                             onChangeText={onChangeText}

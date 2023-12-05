@@ -2,10 +2,7 @@ package com.example.server.controller;
 
 import com.example.server.model.RequestChatDTO;
 import com.example.server.service.ChatService;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/chat")
@@ -21,6 +18,6 @@ public class ChatController {
     @PostMapping("/send")
     public String chattingService(@RequestBody RequestChatDTO dto) {
         System.out.println("dto = " + dto.toString());
-        return "통신 테스트";
+        return "test";
     }
 }
