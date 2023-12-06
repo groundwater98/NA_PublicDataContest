@@ -7,6 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class ServerConfig  {
 
-    public static Integer PAGE_SIZE;
+    public static Integer PAGE_SIZE = 10;
 
 }

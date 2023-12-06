@@ -6,10 +6,7 @@ import com.example.server.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +22,8 @@ public class BoardController {
     private final BoardService service;
 
     // 페이징 처리를 처리할 컨트롤러
-    @GetMapping("/list/{page}")
-    public Page<ResponseAgendaDTO> requestBoardList(@PathVariable int page) {
+    @GetMapping("/list")
+    public Page<ResponseAgendaDTO> requestBoardList(@RequestParam int page) {
         log.info("{}", page);
         return service.findByBoardPage(page);
     }
