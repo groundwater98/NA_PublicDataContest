@@ -28,7 +28,7 @@ public class Agenda {
     @Enumerated(EnumType.ORDINAL)
     private State state;
     // 추천
-    private Long recommend;
+    private Long like;
 
     public static Agenda from(RequestAgendaDTO dto) {
         return Agenda.builder()

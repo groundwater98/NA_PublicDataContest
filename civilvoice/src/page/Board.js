@@ -1,5 +1,13 @@
-import React from 'react';
-import {Dimensions, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {theme} from "../../color";
 import Header from "../component/Header";
 import {useNavigation} from "@react-navigation/native";
@@ -7,8 +15,12 @@ import BoardRead from "../component/BoardRead";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Board = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1); // 페이지 번호, 초기값은 1
+
     const navigation = useNavigation();
-    const data = [
+    const testdata = [
         { no: 1, title: '1번째 제목', like: 5, check: 1 },
         { no: 2 ,title: '2번째 제목', like: 1, check: 0 },
         { no: 3 ,title: '3번째 제목', like: 3, check: 1 },
@@ -26,6 +38,49 @@ const Board = () => {
         { no: 15 ,title: '2번째 제목', like: 1, check: 0 },
         { no: 16 ,title: '3번째 제목', like: 3, check: 1 },
     ]
+
+
+    const fetchData = async () => {
+        setLoading(true);
+
+        try {
+            const response = await fetch(`http://172.20.1.22:9000/api/board/list?page=${page}`);
+            if (response.ok) {
+                const newData = await response.json();
+                if (newData !== null) {
+                    setData(data.concat(newData)); // 기존 데이터와 새 데이터 합치기
+                    setPage(page + 1); // 페이지 번호 증가
+                } else {
+                    console.log('No more data available.');
+                    // 서버로부터 데이터가 더 이상 없는 경우 처리
+                    // 이때 "데이터가 없습니다."를 표시하거나 다른 필요한 작업 수행
+                }
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchData(); // 컴포넌트가 처음 마운트될 때 데이터 로딩
+    }, []);
+
+    const handleLoadMore = () => {
+        // 스크롤이 일정 위치에 도달하면 추가 데이터 로딩
+        if (!loading) {
+            fetchData();
+        }
+    };
+
+    const renderFooter = () => {
+        // 추가 데이터 로딩 중일 때 로딩 표시
+        return loading ? <ActivityIndicator size="large" color= {theme.skyblue} /> : null;
+    };
+
+
     return (
         <View style={{flex: 1}}>
             <Header text={"Civil Voice"}></Header>
@@ -39,8 +94,9 @@ const Board = () => {
                         </View>
 
                         {/*안건 영역*/}
+                        {data == null ? (
                         <FlatList
-                            data={data}
+                            data={testdata}
                             keyExtractor={(_) => _.no}
                             style={styles.agendaContainer}
                             renderItem={({ item }) => {
@@ -49,7 +105,16 @@ const Board = () => {
                                     <BoardRead title={title} like={like} check={check} no={item.no.toString()}/>
                                 )
                             }}
+                            onEndReached={handleLoadMore} // 스크롤이 끝에 도달했을 때 호출
+                            onEndReachedThreshold={0.1} // 끝에 도달하기 전 스크롤 위치 비율
+                            ListFooterComponent={renderFooter} // 추가 데이터 로딩 중일 때 표시될 컴포넌트
                         />
+                        ) : (
+                            <View style={styles.emptyAgendaContainer}>
+                                <Text>데이터가 없습니다.</Text>
+                            </View>
+                        )}
+
                         <View
                             style={styles.footerContainer}
                         >
@@ -142,6 +207,10 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 20,
         fontWeight: "700",
+    },
+    emptyAgendaContainer : {
+        marginVertical: 10,
+        width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
     },
 });
 
