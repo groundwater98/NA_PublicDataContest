@@ -6,7 +6,9 @@ import {useNavigation} from "@react-navigation/native";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Category = () => {
+
     const navigation = useNavigation();
+
     return (
         <View style={{flex: 1}}>
             <Header text={"Civil Voice"}></Header>

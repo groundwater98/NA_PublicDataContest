@@ -9,7 +9,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class RequestChatDTO {
 
-
+    public String categoryName;
+    public String typeOfConversation;
     public String text;
 
 }

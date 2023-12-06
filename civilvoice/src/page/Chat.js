@@ -4,31 +4,41 @@ import Header from "../component/Header";
 import {Button, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
 import {Fontisto} from "@expo/vector-icons";
+import NetInfo, {useNetInfo} from "@react-native-community/netinfo";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
 
+    const netInfo = useNetInfo();
     const navigation = useNavigation();
     const route = useRoute();
     const [text, setText] = useState("");
     const [message, setMessage] = useState({});
     const [count, setCount] = useState(0);
 
+    const { categoryName, typeOfConversation } = route.params;
+
     const onChangeText = (payload) => setText(payload);
 
     const addToDo = async () => {
+
         try {
             if (text === "") {
                 return;
             }
 
-            const response = await fetch("http://192.168.0.12:9000/api/chat/send", {
+            const ipInfo = netInfo.details.ipAddress
+            console.log(ipInfo)
+
+            const response = await fetch("http://172.20.1.22:9000/api/chat/send", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    text: text
+                    categoryName : categoryName,
+                    typeOfConversation : typeOfConversation,
+                    text: text,
                 })
             });
 
@@ -37,9 +47,6 @@ const Chat = () => {
             }
 
             const responseText = await response.text();
-
-            console.log(text)
-            console.log(responseText)
 
             // 기존 message 객체의 키 개수를 통해 새로운 count를 계산
             const newCount = Object.keys(message).length;
@@ -50,13 +57,11 @@ const Chat = () => {
             };
             setMessage(userMessage);
             setText("");
-            console.log(userMessage)
 
             const botMessage = {
                 ...userMessage,
                 [newCount + 1]: { text: responseText , user: false }
             };
-            console.log(userMessage)
             setMessage(botMessage);
         } catch (error) {
             console.error("There was a problem with the fetch operation:", error.message);
@@ -79,7 +84,7 @@ const Chat = () => {
 
     return (
             <View style={{flex: 1}}>
-                <Header text={"Civil Voice"}></Header>
+                <Header text={categoryName+ " " +typeOfConversation}></Header>
                 <View style={styles.container}>
                     {/* 상단 영역*/}
                     <ScrollView
