@@ -6,9 +6,11 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Category = () => {
+
     const navigation = useNavigation();
     const route = useRoute();
     const { categoryName } = route.params;
+
     return (
         <View style={{flex: 1}}>
             <Header text={"Civil Voice"}></Header>
@@ -23,13 +25,14 @@ const Category = () => {
                     <View style={{marginTop: 20}}>
                         <View style={styles.ChatTitleContainer}>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Chat')}
+                                onPress={() => navigation.navigate('Chat', { categoryName : categoryName, typeOfConversation : "법률 정보 알아보기"})}
                             >
                                 <Text style={styles.ChatTitleText}>법률 정보 알아보기</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.ChatTitleContainer}>
                             <TouchableOpacity
+                                onPress={() => navigation.navigate('Chat', { categoryName : categoryName, typeOfConversation : "최신 입법사항 알아보기"})}
                             >
                                 <Text style={styles.ChatTitleText}>최신 입법 사항 알아보기</Text>
                             </TouchableOpacity>
