@@ -22,6 +22,8 @@ const Chat = () => {
 
     const addToDo = async () => {
 
+        console.log(categoryName, typeOfConversation, text)
+
         try {
             if (text === "") {
                 return;
@@ -30,7 +32,7 @@ const Chat = () => {
             const ipInfo = netInfo.details.ipAddress
             console.log(ipInfo)
 
-            const response = await fetch("http://172.20.1.22:9000/api/chat/send", {
+            const response = await fetch(`http://192.168.0.9:9000/api/chat/send`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,18 +1,14 @@
 package com.example.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
-import org.hibernate.usertype.UserType;
 
 @Entity
 public class User {
 
     @Id @GeneratedValue
     private Long userId;
-    @Enumerated(EnumType.ORDINAL)
-    private UserPermissions userCase;
-
+    private String userCase;
 }
 
-enum UserPermissions {
-    USer, Admin
-}
