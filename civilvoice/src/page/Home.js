@@ -3,12 +3,40 @@ import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image} from '
 import {LinearGradient} from "expo-linear-gradient";
 import {theme} from "../../color";
 import { Fontisto } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import React from 'react';
+import React, {useState} from 'react';
 
 const Home = ({navigation}) => {
 
     const imagePath = require('../../assets/gov.png')
+    const [ user, setUser ] = useState("");
+
+    const login = async (userInfo) => {
+
+        const response = await fetch(`http://192.168.0.9:9000/api/login/check`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user: userInfo,
+            })
+        });
+
+        const session = await response.json();
+        console.log(session)
+
+        // session에 값을 저장
+        await AsyncStorage.setItem('session', session.userCase);
+
+        // session 값 가져와서 user 상태에 설정
+        let sessionInfo = await AsyncStorage.getItem('session', (error, result) => {
+            console.log(result)
+            return result;
+        })
+        setUser(sessionInfo)
+    }
 
     return (
         <LinearGradient
@@ -18,7 +46,7 @@ const Home = ({navigation}) => {
             <View style={styles.maintop}>
                 <TouchableOpacity
                     // 버튼을 클릭하면 Test용 User 계정으로 로그인 하는 버튼
-                    // onPress={user}
+                    onPress={() => login("user")}
                 >
                     <Text
                         style={styles.account}
@@ -27,9 +55,10 @@ const Home = ({navigation}) => {
                         <Fontisto name={"male"} size={25}></Fontisto>
                     </Text>
                 </TouchableOpacity>
+                <Text style={styles.account}>{user ? user : ""}</Text>
                 <TouchableOpacity
                     // 버튼을 클릭하면 Test용 Admin 계정으로 로그인 하는 버튼
-                    // onPress={admin}
+                    onPress={() => login("admin")}
                     style={styles.account}
                 >
                     <Text

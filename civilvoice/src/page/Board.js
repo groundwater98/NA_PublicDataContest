@@ -14,6 +14,7 @@ import {useNavigation} from "@react-navigation/native";
 import BoardRead from "../component/BoardRead";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 const Board = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -43,8 +44,10 @@ const Board = () => {
     const fetchData = async () => {
         setLoading(true);
 
+        console.log(page)
+
         try {
-            const response = await fetch(`http://172.20.1.22:9000/api/board/list?page=${page}`);
+            const response = await fetch(`http://192.168.0.9:9000/api/board/list?page=${page}`);
             if (response.ok) {
                 const newData = await response.json();
                 if (newData !== null) {
@@ -94,7 +97,7 @@ const Board = () => {
                         </View>
 
                         {/*안건 영역*/}
-                        {data == null ? (
+                        {testdata !== null ? (
                         <FlatList
                             data={testdata}
                             keyExtractor={(_) => _.no}
@@ -110,8 +113,9 @@ const Board = () => {
                             ListFooterComponent={renderFooter} // 추가 데이터 로딩 중일 때 표시될 컴포넌트
                         />
                         ) : (
-                            <View style={styles.emptyAgendaContainer}>
-                                <Text>데이터가 없습니다.</Text>
+                            // 데이터가 없으면 보여줄 뷰
+                            <View style={styles.agendaContainer}>
+                                <BoardRead title={"데이터가 없습니다"} like={""} check={""} no={1}></BoardRead>
                             </View>
                         )}
 
@@ -209,8 +213,8 @@ const styles = StyleSheet.create({
         fontWeight: "700",
     },
     emptyAgendaContainer : {
-        marginVertical: 10,
         width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
+        height : SCREEN_HEIGHT,
     },
 });
 

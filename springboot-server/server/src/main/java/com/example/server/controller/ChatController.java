@@ -17,7 +17,7 @@ public class ChatController {
     // 채팅이 이뤄지며 유저에게 반환할 데이터
     // Service단까지만 들어가고 DB에는 접근하지 않아도 됌
     @PostMapping("/send")
-    public String chattingService(@RequestBody RequestChatDTO dto) {
+    public String chattingService(@Validated @RequestBody RequestChatDTO dto) {
         System.out.println("dto = " + dto.toString());
         return "통신 성공 Text입니다";
     }

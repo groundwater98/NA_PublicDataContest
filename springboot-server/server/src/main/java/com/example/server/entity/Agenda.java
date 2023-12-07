@@ -1,7 +1,7 @@
 package com.example.server.entity;
 
 import com.example.server.model.RequestAgendaDTO;
-import com.example.server.model.ResponseAgendaDTO;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
 @Getter
-@Table(name = "board_table")
+// @Table(name = "board_table")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Agenda {
@@ -25,10 +27,12 @@ public class Agenda {
     private String detail;
     @CreationTimestamp
     private LocalDateTime createDate;
-    @Enumerated(EnumType.ORDINAL)
-    private State state;
+    private String state;
     // 추천
-    private Long like;
+    private Long recommend;
+    // 댓글
+    @OneToMany(mappedBy = "agenda", fetch = FetchType.LAZY)
+    private List<AgendaRecommend> agendaRecommends = new ArrayList<>();
 
     public static Agenda from(RequestAgendaDTO dto) {
         return Agenda.builder()
@@ -36,8 +40,6 @@ public class Agenda {
                 .detail(dto.getTitle())
                 .build();
     }
+
 }
 
-enum State {
-    CHECK, NONE
-}
