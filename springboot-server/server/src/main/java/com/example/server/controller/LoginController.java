@@ -34,5 +34,4 @@ public class LoginController {
 		// json으로 변환해서 React-native로 리턴
 		return objectMapper.writeValueAsString(login);
 	}
-
 }

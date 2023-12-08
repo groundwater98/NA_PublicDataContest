@@ -65,7 +65,7 @@ const Category = () => {
                         </View>
                         <View style={styles.ChatTitleContainer}>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('CategoryDetail', {categoryName : '안건 작성'})}
+                                onPress={() => navigation.navigate('Chat', {categoryName : '안건 작성', typeOfConversation : "" })}
                             >
                                 <Text style={styles.ChatTitleText}>안건 작성</Text>
                             </TouchableOpacity>

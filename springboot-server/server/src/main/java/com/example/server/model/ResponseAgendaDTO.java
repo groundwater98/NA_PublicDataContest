@@ -19,6 +19,7 @@ public class ResponseAgendaDTO {
     private String title;
     private String detail;
     private LocalDateTime createDate;
+    private Long recommend;
 
     public static ResponseAgendaDTO from(Agenda agenda) {
         return ResponseAgendaDTO.builder()
@@ -26,6 +27,8 @@ public class ResponseAgendaDTO {
                 .title(agenda.getTitle())
                 .detail(agenda.getDetail())
                 .createDate(agenda.getCreateDate())
+                .recommend(agenda.getRecommend())
                 .build();
     }
+
 }

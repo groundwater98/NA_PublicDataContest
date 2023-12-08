@@ -1,6 +1,7 @@
 package com.example.server.controller;
 
 import com.example.server.model.RequestAgendaDTO;
+import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
 import com.example.server.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,12 @@ public class BoardController {
     // 페이징 처리를 처리할 컨트롤러
     @GetMapping("/list")
     public Page<ResponseAgendaDTO> requestBoardList(@RequestParam int page) {
-        log.info("{}", page);
-        return service.findByBoardPage(page);
+        log.info("============================== {}=================================", page);
+        Page<ResponseAgendaDTO> byBoardPage = service.findByBoardPage(page);
+        for (ResponseAgendaDTO responseAgendaDTO : byBoardPage) {
+            log.info("=================== {} ==================", responseAgendaDTO);
+        }
+        return byBoardPage;
     }
 
     // 안건 상세보기를 처리할 컨트롤러
@@ -35,19 +40,16 @@ public class BoardController {
         return service.findByBoardId(boardId);
     }
 
+    @PostMapping("/recommend")
+    public void recommendInsert(@RequestBody RequestRecommendDTO dto) {
+
+    }
+
     // 채팅이 끝나고 작성된 안건을 DB에 저장하는 컨트롤러
-    @GetMapping("/post")
-    public String requestBoardRead(RequestAgendaDTO dto) {
+    @PostMapping("/post")
+    public String requestBoardRead(@RequestBody RequestAgendaDTO dto) {
         log.info("{}", dto.toString());
         return service.insert(dto);
     }
-
-//    유저 권한을 체크하고 권한에 맞는 유저를 React LocalStorage에 저장
-//    학습 후 적용하기
-//    @GetMapping()
-//    public String userCheck(RequestAgendaDTO dto) {
-//        return service.insert(dto);
-//    }
-
 
 }

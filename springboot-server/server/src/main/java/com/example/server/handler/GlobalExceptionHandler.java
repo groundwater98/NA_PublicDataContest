@@ -8,4 +8,5 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     // Exception Handler 작성 예정
+
 }

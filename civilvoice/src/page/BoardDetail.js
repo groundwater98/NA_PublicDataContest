@@ -72,8 +72,11 @@ const BoardDetail = () => {
                             </View>
                         </View>
 
+                        {/* AsycStorage에서 session 정보를 꺼내오고 해당 정보가 ADMIN이면 댓글을 입력할 수 있는 컴포넌트를 추가해줬으면 좋겠어 */}
+
+
                         {/*답변 영역*/}
-                        <View style={styles.agendaContainer}>
+                        <View style={styles.agendaRecommendContainer}>
                             <Text style={styles.agendaTitle}>
                                 국회의원 김지수입니다
                             </Text>
@@ -121,6 +124,15 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
         backgroundColor: theme.whiteBlue,
+        borderRadius: 20,
+        padding: 20,
+        borderColor: theme.skyblue,
+        borderWidth: 3,
+    },
+    agendaRecommendContainer : {
+        marginVertical: 10,
+        width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
+        backgroundColor: "#E7E7E7",
         borderRadius: 20,
         padding: 20,
     },

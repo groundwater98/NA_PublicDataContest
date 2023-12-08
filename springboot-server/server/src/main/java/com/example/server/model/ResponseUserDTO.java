@@ -2,6 +2,7 @@ package com.example.server.model;
 
 
 import com.example.server.entity.User;
+import com.example.server.entity.UserCase;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,5 +16,5 @@ public class ResponseUserDTO {
 
 	private Long userId;
 
-	private String userCase;
+	private UserCase userCase;
 }

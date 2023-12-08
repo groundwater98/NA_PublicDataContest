@@ -18,53 +18,37 @@ const SCREEN_HEIGHT = Dimensions.get("window").height;
 const Board = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1); // 페이지 번호, 초기값은 1
-
+    const [page, setPage] = useState(0); // 페이지 번호, 초기값은 0
+    const [fetchResult, setFetchResult] = useState(true); // 페이지 번호, 초기값은 0
+    const [request, setRequest] = useState(true);
     const navigation = useNavigation();
-    const testdata = [
-        { no: 1, title: '1번째 제목', like: 5, check: 1 },
-        { no: 2 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 3 ,title: '3번째 제목', like: 3, check: 1 },
-        { no: 4, title: '1번째 제목', like: 5, check: 1 },
-        { no: 5 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 6 ,title: '3번째 제목', like: 3, check: 1 },
-        { no: 7, title: '1번째 제목', like: 5, check: 1 },
-        { no: 8 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 9 ,title: '3번째 제목', like: 3, check: 1 },
-        { no: 10, title: '1번째 제목', like: 5, check: 1 },
-        { no: 11 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 12 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 13 ,title: '3번째 제목', like: 3, check: 1 },
-        { no: 14, title: '1번째 제목', like: 5, check: 1 },
-        { no: 15 ,title: '2번째 제목', like: 1, check: 0 },
-        { no: 16 ,title: '3번째 제목', like: 3, check: 1 },
-    ]
-
 
     const fetchData = async () => {
         setLoading(true);
 
         console.log(page)
 
-        try {
-            const response = await fetch(`http://192.168.0.9:9000/api/board/list?page=${page}`);
-            if (response.ok) {
-                const newData = await response.json();
-                if (newData !== null) {
-                    setData(data.concat(newData)); // 기존 데이터와 새 데이터 합치기
-                    setPage(page + 1); // 페이지 번호 증가
-                } else {
-                    console.log('No more data available.');
-                    // 서버로부터 데이터가 더 이상 없는 경우 처리
-                    // 이때 "데이터가 없습니다."를 표시하거나 다른 필요한 작업 수행
+        if (request === true) {
+            try {
+                const response = await fetch(`http://192.168.0.9:9000/api/board/list?page=${page}`);
+                if (response.ok) {
+                    const newData = await response.json();
+                    console.log(newData.content)
+                    if (newData.content && newData.content.length > 0) {
+                        setData(data.concat(newData.content)); // 기존 데이터와 새 데이터 합치기
+                        setPage(page + 1); // 페이지 번호 증가
+                    } else {
+                        console.log('No more data available.');
+                        setRequest(false);
+                    }
                 }
-            } else {
-                console.error('Failed to fetch data');
+            } catch (error) {
+                setFetchResult(false);
+                console.error('Error fetching data:', error);
+                console.log("fetch result ==== " + fetchResult)
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     useEffect(() => {
@@ -78,10 +62,28 @@ const Board = () => {
         }
     };
 
-    const renderFooter = () => {
-        // 추가 데이터 로딩 중일 때 로딩 표시
-        return loading ? <ActivityIndicator size="large" color= {theme.skyblue} /> : null;
+    const requestFail = () => {
+        return !fetchResult ?
+            <View style={styles.frame}>
+                <View>
+                    <Text style={styles.title}> 서버 오류입니다. </Text>
+                </View>
+            </View>
+            : null
     };
+
+    const renderFooter = () => {
+        return (
+            !request ? (
+                <View style={styles.frame}>
+                    <View>
+                        <Text style={styles.title}> 모든 데이터를 불러왔습니다. </Text>
+                    </View>
+                </View>
+            ) : requestFail()
+        )
+    };
+
 
 
     return (
@@ -97,28 +99,20 @@ const Board = () => {
                         </View>
 
                         {/*안건 영역*/}
-                        {testdata !== null ? (
                         <FlatList
-                            data={testdata}
-                            keyExtractor={(_) => _.no}
+                            data={data}
+                            keyExtractor={(_) => _.id}
                             style={styles.agendaContainer}
                             renderItem={({ item }) => {
-                                const { title, like, check } = item;
+                                const { title, recommend, check } = item;
                                 return (
-                                    <BoardRead title={title} like={like} check={check} no={item.no.toString()}/>
+                                    <BoardRead title={title} like={recommend} check={check}/>
                                 )
                             }}
                             onEndReached={handleLoadMore} // 스크롤이 끝에 도달했을 때 호출
                             onEndReachedThreshold={0.1} // 끝에 도달하기 전 스크롤 위치 비율
                             ListFooterComponent={renderFooter} // 추가 데이터 로딩 중일 때 표시될 컴포넌트
                         />
-                        ) : (
-                            // 데이터가 없으면 보여줄 뷰
-                            <View style={styles.agendaContainer}>
-                                <BoardRead title={"데이터가 없습니다"} like={""} check={""} no={1}></BoardRead>
-                            </View>
-                        )}
-
                         <View
                             style={styles.footerContainer}
                         >
@@ -145,6 +139,7 @@ const styles = StyleSheet.create({
         flex: 11,
     },
     mainContainer: {
+        height: SCREEN_HEIGHT*0.9,
         marginVertical: 30,
         marginHorizontal: SCREEN_WIDTH*0.05,
         borderColor: theme.whiteBlue,
@@ -216,6 +211,27 @@ const styles = StyleSheet.create({
         width : SCREEN_WIDTH-(4*(SCREEN_WIDTH*0.05)),
         height : SCREEN_HEIGHT,
     },
+    frame: {
+        marginBottom: 30,
+        flex: 1,
+        flexDirection: "row",
+        backgroundColor: "#E7E7E7",
+        borderRadius: 20,
+        padding: 20,
+    },
+    title: {
+        fontSize: 20,
+        color: "#333",
+        fontWeight: "700",
+    },
+    detail: {
+        fontSize: 18,
+        color: "#333",
+        fontWeight: "500",
+    },
+    form: {
+        flexDirection: "row",
+    }
 });
 
 export default Board;
