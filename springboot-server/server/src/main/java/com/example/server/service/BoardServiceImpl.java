@@ -3,6 +3,7 @@ package com.example.server.service;
 import com.example.server.dao.BoardDAO;
 import com.example.server.entity.Agenda;
 import com.example.server.model.RequestAgendaDTO;
+import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,5 +33,10 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public ResponseAgendaDTO findByBoardId(Long boardId) {
         return ResponseAgendaDTO.from(dao.findByBoardId(boardId));
+    }
+
+    @Override
+    public void recommendInsert(RequestRecommendDTO dto) {
+
     }
 }

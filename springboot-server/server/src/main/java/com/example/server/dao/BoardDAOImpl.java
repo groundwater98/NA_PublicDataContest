@@ -1,6 +1,7 @@
 package com.example.server.dao;
 
 import com.example.server.entity.Agenda;
+import com.example.server.entity.AgendaRecommend;
 import com.example.server.model.ResponseAgendaDTO;
 import com.example.server.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,10 @@ public class BoardDAOImpl implements BoardDAO{
     public Agenda findByBoardId(Long boardId) {
         // 프록시로 받기
         return repository.getReferenceById(boardId);
+    }
+
+    @Override
+    public void recommendInsert(AgendaRecommend recommend) {
+
     }
 }
