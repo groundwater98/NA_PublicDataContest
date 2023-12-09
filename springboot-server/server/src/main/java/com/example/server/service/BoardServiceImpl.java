@@ -2,6 +2,7 @@ package com.example.server.service;
 
 import com.example.server.dao.BoardDAO;
 import com.example.server.entity.Agenda;
+import com.example.server.entity.AgendaRecommend;
 import com.example.server.model.RequestAgendaDTO;
 import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
@@ -37,6 +38,8 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void recommendInsert(RequestRecommendDTO dto) {
-
+        Agenda byBoardId = dao.findByBoardId(dto.getId());
+        AgendaRecommend from = AgendaRecommend.from(dto);
+        from.changeAgenda(byBoardId);
     }
 }

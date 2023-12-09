@@ -2,6 +2,7 @@ package com.example.server.entity;
 
 import java.time.LocalDateTime;
 
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.example.server.model.RequestRecommendDTO;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AgendaRecommend {

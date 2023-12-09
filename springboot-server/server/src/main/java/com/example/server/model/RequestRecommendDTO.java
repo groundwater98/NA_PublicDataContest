@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class RequestRecommendDTO {
 
 	private Long id;
-	private String title;
-	private String Detail;
+	private String detail;
 }
