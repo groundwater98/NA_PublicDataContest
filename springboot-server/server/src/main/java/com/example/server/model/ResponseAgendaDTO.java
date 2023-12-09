@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -20,6 +22,7 @@ public class ResponseAgendaDTO {
     private String detail;
     private LocalDateTime createDate;
     private Long recommend;
+    private List<ResponseRecommendDTO> responseRecommendDTO;
 
     public static ResponseAgendaDTO from(Agenda agenda) {
         return ResponseAgendaDTO.builder()
@@ -28,6 +31,11 @@ public class ResponseAgendaDTO {
                 .detail(agenda.getDetail())
                 .createDate(agenda.getCreateDate())
                 .recommend(agenda.getRecommend())
+                .responseRecommendDTO(agenda.getAgendaRecommends()
+                        .stream()
+                        .map(ResponseRecommendDTO :: from)
+                        .collect(Collectors.toList())
+                )
                 .build();
     }
 

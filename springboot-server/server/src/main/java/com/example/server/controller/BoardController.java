@@ -42,7 +42,7 @@ public class BoardController {
 
     @PostMapping("/recommend")
     public void recommendInsert(@RequestBody RequestRecommendDTO dto) {
-
+        service.recommendInsert(dto);
     }
 
     // 채팅이 끝나고 작성된 안건을 DB에 저장하는 컨트롤러

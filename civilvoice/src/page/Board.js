@@ -30,7 +30,7 @@ const Board = () => {
 
         if (request === true) {
             try {
-                const response = await fetch(`http://192.168.0.9:9000/api/board/list?page=${page}`);
+                const response = await fetch(`http://172.20.1.22:9000/api/board/list?page=${page}`);
                 if (response.ok) {
                     const newData = await response.json();
                     console.log(newData.content)

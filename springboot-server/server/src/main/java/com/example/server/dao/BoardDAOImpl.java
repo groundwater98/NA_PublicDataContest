@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.server.config.ServerConfig.PAGE_SIZE;
 
@@ -29,9 +30,8 @@ public class BoardDAOImpl implements BoardDAO{
     @Override
     public Page<ResponseAgendaDTO> findByBoardPage(int page) {
         Pageable pg = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createDate"));
-        Page<ResponseAgendaDTO> map = repository.findAll(pg)
+        return repository.findAll(pg)
                 .map(ResponseAgendaDTO::from);
-        return map;
     }
 
     // 안건 DB에 저장
@@ -46,7 +46,8 @@ public class BoardDAOImpl implements BoardDAO{
     @Override
     public Agenda findByBoardId(Long boardId) {
         // 프록시로 받기
-        return repository.getReferenceById(boardId);
+        Optional<Agenda> byId = repository.findById(boardId);
+        return byId.orElse(null);
     }
 
     @Override

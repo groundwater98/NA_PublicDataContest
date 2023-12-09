@@ -38,7 +38,7 @@ public class Agenda {
     @ColumnDefault("0")
     private Long recommend;
     // 댓글 상위 게시물이 지워지면 댓글도 모두 삭제되도록
-    @OneToMany(mappedBy = "agenda", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "agenda", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OrderBy("agendaRecommendId asc")
     private List<AgendaRecommend> agendaRecommends = new ArrayList<>();
 
