@@ -37,6 +37,27 @@ const recomment = "인공지능(AI)을 활용한 법률상담 서비스 도입�
 
 const BoardDetail = () => {
     const navigation = useNavigation();
+
+    const renderCommentInput = () => {
+        if (userRole === 'ADMIN') {
+            return (
+                <View>
+                    {/* 여기에 댓글 입력 컴포넌트를 넣어주세요 */}
+                    {/* 예시:
+                    <TextInput
+                        placeholder="댓글을 입력하세요..."
+                        // 다른 속성들
+                    />
+                    */}
+                    <TouchableOpacity>
+                        <Text>댓글 제출</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        return null;
+    };
+
     return (
         <View style={{flex: 1}}>
             <Header text={"Civil Voice"}></Header>
@@ -72,7 +93,9 @@ const BoardDetail = () => {
                             </View>
                         </View>
 
-                        {/* AsycStorage에서 session 정보를 꺼내오고 해당 정보가 ADMIN이면 댓글을 입력할 수 있는 컴포넌트를 추가해줬으면 좋겠어 */}
+                        {/* AsycStorage에서 session 정보를 꺼내오고 해당 정보가 ADMIN이면 댓글을 입력할 수 있는 컴포넌트를 추가 */}
+                        {/* 좀더 손봐야함 */}
+                        {renderCommentInput()}
 
 
                         {/*답변 영역*/}
