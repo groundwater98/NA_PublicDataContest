@@ -104,9 +104,9 @@ const Board = () => {
                             keyExtractor={(_) => _.id}
                             style={styles.agendaContainer}
                             renderItem={({ item }) => {
-                                const { title, recommend, check } = item;
+                                const { id ,title, recommend, check } = item;
                                 return (
-                                    <BoardRead title={title} like={recommend} check={check}/>
+                                    <BoardRead id={id} title={title} like={recommend} check={check}/>
                                 )
                             }}
                             onEndReached={handleLoadMore} // 스크롤이 끝에 도달했을 때 호출
