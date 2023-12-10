@@ -6,6 +6,7 @@ import com.example.server.entity.AgendaRecommend;
 import com.example.server.model.RequestAgendaDTO;
 import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
+import com.example.server.model.ResponseBoardDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class BoardServiceImpl implements BoardService{
 
     // 비동기 통신으로 전달받을 page 번호를 바탕으로 ResponseAgendaDTO list를 반환
     @Override
-    public Page<ResponseAgendaDTO> findByBoardPage(int page) {
+    public Page<ResponseBoardDTO> findByBoardPage(int page) {
         return dao.findByBoardPage(page);
     }
 

@@ -3,6 +3,7 @@ package com.example.server.dao;
 import com.example.server.entity.Agenda;
 import com.example.server.entity.AgendaRecommend;
 import com.example.server.model.ResponseAgendaDTO;
+import com.example.server.model.ResponseBoardDTO;
 import com.example.server.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +29,10 @@ public class BoardDAOImpl implements BoardDAO{
     // 페이징 설정 후 결과값 리턴
     // NullPointException Optional로 처리해야함
     @Override
-    public Page<ResponseAgendaDTO> findByBoardPage(int page) {
+    public Page<ResponseBoardDTO> findByBoardPage(int page) {
         Pageable pg = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createDate"));
         return repository.findAll(pg)
-                .map(ResponseAgendaDTO::from);
+                .map(ResponseBoardDTO::from);
     }
 
     // 안건 DB에 저장

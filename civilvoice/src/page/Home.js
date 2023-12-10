@@ -14,7 +14,7 @@ const Home = ({navigation}) => {
 
     const login = async (userInfo) => {
 
-        const response = await fetch(`http://192.168.0.9:9000/api/login/check`, {
+        const response = await fetch(`http://172.20.1.22:9000/api/login/check`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -3,6 +3,7 @@ package com.example.server.controller;
 import com.example.server.model.RequestAgendaDTO;
 import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
+import com.example.server.model.ResponseBoardDTO;
 import com.example.server.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +25,11 @@ public class BoardController {
 
     // 페이징 처리를 처리할 컨트롤러
     @GetMapping("/list")
-    public Page<ResponseAgendaDTO> requestBoardList(@RequestParam int page) {
+    public Page<ResponseBoardDTO> requestBoardList(@RequestParam int page) {
         log.info("============================== {}=================================", page);
-        Page<ResponseAgendaDTO> byBoardPage = service.findByBoardPage(page);
-        for (ResponseAgendaDTO responseAgendaDTO : byBoardPage) {
-            log.info("=================== {} ==================", responseAgendaDTO);
+        Page<ResponseBoardDTO> byBoardPage = service.findByBoardPage(page);
+        for (ResponseBoardDTO responseBoardDTO : byBoardPage) {
+            log.info("=================== {} ==================", responseBoardDTO);
         }
         return byBoardPage;
     }
@@ -36,12 +37,12 @@ public class BoardController {
     // 안건 상세보기를 처리할 컨트롤러
     @GetMapping("/content/{boardId}")
     public ResponseAgendaDTO requestBoardRead(@PathVariable Long boardId) {
-        log.info("{}", boardId);
         return service.findByBoardId(boardId);
     }
 
     @PostMapping("/recommend")
     public void recommendInsert(@RequestBody RequestRecommendDTO dto) {
+        System.out.println("dto = " + dto);
         service.recommendInsert(dto);
     }
 

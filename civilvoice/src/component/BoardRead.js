@@ -3,13 +3,14 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {theme} from "../../color";
 import {useNavigation} from "@react-navigation/native";
 
-const BoardRead = ({ title, like, check }) => {
+const BoardRead = ({ id, title, like, check }) => {
 
     const navigation = useNavigation();
+
     return (
 
         <TouchableOpacity
-            onPress={() => navigation.navigate('BoardDetail')}
+            onPress={() => navigation.navigate('BoardDetail', {id : id})}
         >
             <View style={styles.frame}>
                 <View>
