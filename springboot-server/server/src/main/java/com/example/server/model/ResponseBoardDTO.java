@@ -1,6 +1,8 @@
 package com.example.server.model;
 
 import com.example.server.entity.Agenda;
+import com.example.server.entity.CheckState;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class ResponseBoardDTO {
     private String detail;
     private LocalDateTime createDate;
     private Long recommend;
+    private CheckState state;
 
     public static ResponseBoardDTO from(Agenda agenda) {
         return ResponseBoardDTO.builder()
@@ -26,7 +29,8 @@ public class ResponseBoardDTO {
                 .title(agenda.getTitle())
                 .detail(agenda.getDetail())
                 .createDate(agenda.getCreateDate())
-                .recommend(agenda.getRecommend())
+                .recommend((long)agenda.getLikeAgendaList().size())
+                .state(agenda.getState())
                 .build();
     }
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {theme} from "../../color";
+import {theme, ip} from "../../color";
 import Header from "../component/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Fontisto } from '@expo/vector-icons';
@@ -16,8 +16,10 @@ const BoardDetail = () => {
     const [text, setText] = useState("");
     const [ title, setTitle] = useState("")
     const [ detail, setDetail] = useState("")
-    const [ recommend, setRecommend] = useState(0)
+    const [ recommend, setRecommend] = useState([])
     const [ recommendArr, setRecommendArr] = useState([])
+    const [ check, setCheck ] = useState([])
+    const [ userId, setUserId ] = useState("")
     const route = useRoute();
 
     const { id } = route.params;
@@ -28,7 +30,7 @@ const BoardDetail = () => {
         }
         console.log("addToDo 발동")
         console.log(text)
-        const response = await fetch(`http://172.20.1.22:9000/api/board/recommend`, {
+        const response = await fetch(`http://${ip}:9000/api/board/recommend`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -42,30 +44,56 @@ const BoardDetail = () => {
         setText("");
     }
 
+    const addLike = async () => {
+        const response = await fetch(`http://${ip}:9000/api/board/like`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                boardId: id,
+                userId: userId,
+            })
+        });
+        const newData = await response.json();
+        console.log(newData)
+        const user = newData.recommend.map(item => item.user);
+
+        console.log(user)
+        setRecommend(user)
+    }
+
     const fetchData = async () => {
         try {
-            console.log("useEffect 발동")
-            const response = await fetch(`http://172.20.1.22:9000/api/board/content/1`);
+            const response = await fetch(`http://${ip}:9000/api/board/content/${id}`);
             const newData = await response.json();
             setTitle(newData.title)
             setDetail(newData.detail)
-            setRecommend(newData.recommend)
+            console.log("=======================")
+            console.log(newData.recommend)
+            console.log("=======================")
+            setRecommend(newData.recommend.map(item => item.user))
             setRecommendArr(newData.responseRecommendDTO)
+            setCheck(newData.state)
         } catch (error) {
             console.log(error);
         }
     };
 
+    // session 값 가져와서 user 상태에 설정
     const checkAdmin = async () => {
-        let sessionInfo = await AsyncStorage.getItem('session');
-        if (sessionInfo === 'ADMIN') {
+        let sessionInfo = await AsyncStorage.getItem('session')
+        sessionInfo = JSON.parse(sessionInfo);
+        setUserId(sessionInfo.userId)
+        if (sessionInfo.userCase === 'ADMIN') {
+            const response = await fetch(`http://${ip}:9000/api/board/check/${id}`);
             setIsAdmin(true);
         }
     };
 
     useEffect(() => {
-        fetchData();
         checkAdmin();
+        fetchData();
     }, []);
 
     const onChangeText = (payload) => setText(payload);
@@ -146,14 +174,16 @@ const BoardDetail = () => {
                                 {detail}
                             </Text>
                             <View style={styles.bottomBtnContainer}>
-                                <TouchableOpacity>
-                                    <View style={styles.bottomBtn}>
+                                <TouchableOpacity
+                                    onPress={addLike}
+                                >
+                                    <View style={!recommend.includes(userId) ? {...styles.bottomBtn, backgroundColor: "white"} : {...styles.bottomBtn, backgroundColor: theme.skyblue} }>
                                         <Fontisto
                                             name={"like"}
                                             size={15}
-                                            color={theme.skyblue}
+                                            color={!recommend.includes(userId) ? theme.skyblue : "white"}
                                         />
-                                        <Text style={styles.bottomBtnText}>{recommend}</Text>
+                                        <Text style={!recommend.includes(userId) ?  styles.bottomBtnText : {...styles.bottomBtnText, color: "white"} }>{recommend.length}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -162,7 +192,6 @@ const BoardDetail = () => {
                         {/* AsycStorage에서 session 정보를 꺼내오고 해당 정보가 ADMIN이면 댓글을 입력할 수 있는 컴포넌트를 추가 */}
                         {/* 좀더 손봐야함 */}
                         {renderCommentInput()}
-
 
                         {/*답변 영역*/}
                         {recommendArrComponent()}

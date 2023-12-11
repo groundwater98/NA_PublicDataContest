@@ -1,6 +1,7 @@
 package com.example.server.controller;
 
 import com.example.server.model.RequestAgendaDTO;
+import com.example.server.model.RequestLikeDTO;
 import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
 import com.example.server.model.ResponseBoardDTO;
@@ -51,6 +52,17 @@ public class BoardController {
     public String requestBoardRead(@RequestBody RequestAgendaDTO dto) {
         log.info("{}", dto.toString());
         return service.insert(dto);
+    }
+
+    @GetMapping("/check/{boardId}")
+    public void adminCheck(@PathVariable Long boardId) {
+        service.adminCheck(boardId);
+    }
+
+    @PostMapping("/like")
+    public ResponseAgendaDTO likeCheck(@RequestBody RequestLikeDTO dto) {
+        System.out.println("dto = " + dto);
+        return service.likeCheck(dto);
     }
 
 }

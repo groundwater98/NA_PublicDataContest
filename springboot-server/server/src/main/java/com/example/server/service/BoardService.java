@@ -1,6 +1,7 @@
 package com.example.server.service;
 
 import com.example.server.model.RequestAgendaDTO;
+import com.example.server.model.RequestLikeDTO;
 import com.example.server.model.RequestRecommendDTO;
 import com.example.server.model.ResponseAgendaDTO;
 import com.example.server.model.ResponseBoardDTO;
@@ -13,5 +14,7 @@ public interface BoardService {
     ResponseAgendaDTO findByBoardId(Long boardId);
 
     void recommendInsert(RequestRecommendDTO dto);
+    void adminCheck(Long id);
+    ResponseAgendaDTO likeCheck(RequestLikeDTO dto);
 
 }

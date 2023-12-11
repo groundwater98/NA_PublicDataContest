@@ -1,6 +1,9 @@
 package com.example.server.model;
 
 import com.example.server.entity.Agenda;
+import com.example.server.entity.CheckState;
+import com.example.server.entity.LikeAgenda;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +24,9 @@ public class ResponseAgendaDTO {
     private String title;
     private String detail;
     private LocalDateTime createDate;
-    private Long recommend;
+    private List<ResponseLikeAgendaDTO> recommend;
     private List<ResponseRecommendDTO> responseRecommendDTO;
+    private CheckState state;
 
     public static ResponseAgendaDTO from(Agenda agenda) {
         return ResponseAgendaDTO.builder()
@@ -30,12 +34,19 @@ public class ResponseAgendaDTO {
                 .title(agenda.getTitle())
                 .detail(agenda.getDetail())
                 .createDate(agenda.getCreateDate())
-                .recommend(agenda.getRecommend())
+                // 좋아요한 유저의 수를 recommend에 담아 return
+                .recommend(agenda.getLikeAgendaList()
+                    .stream()
+                    .map(ResponseLikeAgendaDTO :: from)
+                    .collect(Collectors.toList())
+                )
+                // AgendaRecommends를 DTO로
                 .responseRecommendDTO(agenda.getAgendaRecommends()
                         .stream()
                         .map(ResponseRecommendDTO :: from)
                         .collect(Collectors.toList())
                 )
+                .state(agenda.getState())
                 .build();
     }
 

@@ -19,6 +19,14 @@ spring:
         format_sql: true
         use_sql_comments: true
 
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정
+      continue-on-error: false # 서버 시작시 sql문을 실행할 때 오류 무시하고 계속 진행
+      data-locations: classpath:data.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
+
 logging:
   level:
     org:

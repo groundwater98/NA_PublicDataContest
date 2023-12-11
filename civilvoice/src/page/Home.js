@@ -1,7 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import {LinearGradient} from "expo-linear-gradient";
-import {theme} from "../../color";
+import {theme, ip} from "../../color";
 import { Fontisto } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -14,7 +13,7 @@ const Home = ({navigation}) => {
 
     const login = async (userInfo) => {
 
-        const response = await fetch(`http://172.20.1.22:9000/api/login/check`, {
+        const response = await fetch(`http://${ip}:9000/api/login/check`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -25,17 +24,15 @@ const Home = ({navigation}) => {
         });
 
         const session = await response.json();
-        console.log(session)
 
         // session에 값을 저장
-        await AsyncStorage.setItem('session', session.userCase);
+        await AsyncStorage.setItem('session', JSON.stringify(session));
 
         // session 값 가져와서 user 상태에 설정
-        let sessionInfo = await AsyncStorage.getItem('session', (error, result) => {
-            console.log(result)
-            return result;
-        })
-        setUser(sessionInfo)
+        let sessionInfo = await AsyncStorage.getItem('session')
+        sessionInfo = JSON.parse(sessionInfo);
+        console.log(sessionInfo)
+        setUser(sessionInfo.userCase)
     }
 
     return (

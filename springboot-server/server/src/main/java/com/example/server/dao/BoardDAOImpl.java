@@ -51,8 +51,4 @@ public class BoardDAOImpl implements BoardDAO{
         return byId.orElse(null);
     }
 
-    @Override
-    public void recommendInsert(AgendaRecommend recommend) {
-
-    }
 }
