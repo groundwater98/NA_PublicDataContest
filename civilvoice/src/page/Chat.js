@@ -1,20 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useNavigation, useRoute} from "@react-navigation/native";
+import { useRoute} from "@react-navigation/native";
 import Header from "../component/Header";
-import {Button, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {theme} from "../../color";
+import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {theme, ip} from "../../color";
 import {Fontisto} from "@expo/vector-icons";
-import NetInfo, {useNetInfo} from "@react-native-community/netinfo";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Chat = () => {
 
-    const netInfo = useNetInfo();
-    const navigation = useNavigation();
     const route = useRoute();
     const [text, setText] = useState("");
     const [message, setMessage] = useState({});
-    const [count, setCount] = useState(0);
 
     const { categoryName, typeOfConversation } = route.params;
 
@@ -29,10 +25,7 @@ const Chat = () => {
                 return;
             }
 
-            const ipInfo = netInfo.details.ipAddress
-            console.log(ipInfo)
-
-            const response = await fetch(`http://172.20.1.22:9000/api/chat/send`, {
+            const response = await fetch(`http://${ip}:9000/api/chat/send`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

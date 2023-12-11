@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.server.model.RequestUserDTO;
+import com.example.server.model.ResponseBoardDTO;
 import com.example.server.model.ResponseUserDTO;
 import com.example.server.service.LoginService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,10 +29,16 @@ public class LoginController {
 	private final LoginService service;
 
 	@PostMapping(value = "/check")
-	public String login(@RequestBody RequestUserDTO user) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
+	public ResponseUserDTO login(@RequestBody RequestUserDTO user) {
+		System.out.println("user = " + user);
 		ResponseUserDTO login = service.login(user.getUser());
-		// json으로 변환해서 React-native로 리턴
-		return objectMapper.writeValueAsString(login);
+		return login;
+	}
+
+	@PostMapping(value = "/create")
+	public ResponseUserDTO create(@RequestBody RequestUserDTO user) throws JsonProcessingException {
+		ResponseUserDTO login = service.login(user.getUser());
+		System.out.println("login = " + login);
+		return login;
 	}
 }

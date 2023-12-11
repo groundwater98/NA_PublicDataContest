@@ -13,5 +13,4 @@ public interface BoardDAO {
     public Page<ResponseBoardDTO> findByBoardPage(int page);
     public String insert(Agenda agenda);
     public Agenda findByBoardId(Long boardId);
-    public void recommendInsert(AgendaRecommend recommend);
 }

@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestUserDTO {
+public class RequestLikeDTO {
 
-	private String user;
+	private Long boardId;
+	private Long userId;
 }
+

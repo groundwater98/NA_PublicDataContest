@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-    ActivityIndicator,
     Dimensions,
     FlatList,
     StyleSheet,
@@ -8,10 +7,11 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-import {theme} from "../../color";
+import {theme, ip} from "../../color";
 import Header from "../component/Header";
 import {useNavigation} from "@react-navigation/native";
 import BoardRead from "../component/BoardRead";
+import axios from "axios";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -30,7 +30,7 @@ const Board = () => {
 
         if (request === true) {
             try {
-                const response = await fetch(`http://172.20.1.22:9000/api/board/list?page=${page}`);
+                const response = await fetch(`http://${ip}:9000/api/board/list?page=${page}`);
                 if (response.ok) {
                     const newData = await response.json();
                     console.log(newData.content)

@@ -4,5 +4,7 @@ import com.example.server.model.ResponseUserDTO;
 
 public interface LoginService {
 
-	public ResponseUserDTO login(String user);
+	ResponseUserDTO login(String user);
+
+
 }
