@@ -76,7 +76,7 @@ public class BoardServiceImpl implements BoardService{
             LikeAgenda.from(byBoardId, byId).changeAgenda(byBoardId);
             System.out.println("add");
         } else {
-            byBoardId.getLikeAgendaList().remove(byAgendaIdAndUserId);
+            byBoardId.remove(byAgendaIdAndUserId);
             System.out.println("remove");
         }
         return ResponseAgendaDTO.from(byBoardId);

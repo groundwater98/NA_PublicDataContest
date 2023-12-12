@@ -1,5 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, {useEffect, useState} from 'react'
+import {
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {theme, ip} from "../../color";
 import Header from "../component/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,13 +20,12 @@ const recomment = "test"
 
 const BoardDetail = () => {
 
+    const navigation = useNavigation();
     const [isAdmin, setIsAdmin] = useState(false); // 상태 추가
+    const [data, setData] = useState([])
     const [text, setText] = useState("");
-    const [ title, setTitle] = useState("")
-    const [ detail, setDetail] = useState("")
     const [ recommend, setRecommend] = useState([])
     const [ recommendArr, setRecommendArr] = useState([])
-    const [ check, setCheck ] = useState([])
     const [ userId, setUserId ] = useState("")
     const route = useRoute();
 
@@ -28,8 +35,6 @@ const BoardDetail = () => {
         if (text === "") {
             return;
         }
-        console.log("addToDo 발동")
-        console.log(text)
         const response = await fetch(`http://${ip}:9000/api/board/recommend`, {
             method: "POST",
             headers: {
@@ -56,10 +61,8 @@ const BoardDetail = () => {
             })
         });
         const newData = await response.json();
-        console.log(newData)
         const user = newData.recommend.map(item => item.user);
-
-        console.log(user)
+        setData(newData)
         setRecommend(user)
     }
 
@@ -67,14 +70,9 @@ const BoardDetail = () => {
         try {
             const response = await fetch(`http://${ip}:9000/api/board/content/${id}`);
             const newData = await response.json();
-            setTitle(newData.title)
-            setDetail(newData.detail)
-            console.log("=======================")
-            console.log(newData.recommend)
-            console.log("=======================")
+            setData(newData)
             setRecommend(newData.recommend.map(item => item.user))
             setRecommendArr(newData.responseRecommendDTO)
-            setCheck(newData.state)
         } catch (error) {
             console.log(error);
         }
@@ -168,10 +166,10 @@ const BoardDetail = () => {
                         {/*안건 영역*/}
                         <View style={styles.agendaContainer}>
                             <Text style={styles.agendaTitle}>
-                                {title}
+                                {data.title}
                             </Text>
                             <Text style={styles.agendaDetail}>
-                                {detail}
+                                {data.detail}
                             </Text>
                             <View style={styles.bottomBtnContainer}>
                                 <TouchableOpacity

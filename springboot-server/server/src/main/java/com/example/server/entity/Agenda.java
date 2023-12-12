@@ -50,5 +50,10 @@ public class Agenda {
                 .detail(dto.getTitle())
                 .build();
     }
+
+    public void remove(LikeAgenda likeAgenda) {
+        this.getLikeAgendaList().remove(likeAgenda);
+        likeAgenda.setAgenda(null);
+    }
 }
 
