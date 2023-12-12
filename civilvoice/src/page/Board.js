@@ -9,19 +9,31 @@ import {
 } from "react-native";
 import {theme, ip} from "../../color";
 import Header from "../component/Header";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import BoardRead from "../component/BoardRead";
 import axios from "axios";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-const Board = () => {
+const Board = ({route}) => {
+
+    const {params} = route;
+    const [ recommend, setRecommend ] = useState(0);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0); // 페이지 번호, 초기값은 0
     const [fetchResult, setFetchResult] = useState(true); // 페이지 번호, 초기값은 0
     const [request, setRequest] = useState(true);
     const navigation = useNavigation();
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            // 화면이 focus 될 때마다(fetchData 함수 실행)
+            fetchData();
+        });
+
+        return unsubscribe; // Clean-up 함수, 컴포넌트가 unmount 될 때 이벤트 구독 해제
+    }, [navigation]); // navigation이 변경될 때마다 useEffect가 재실행되도록 설정
 
     const fetchData = async () => {
         setLoading(true);

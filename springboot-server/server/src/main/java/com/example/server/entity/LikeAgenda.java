@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -24,6 +25,7 @@ public class LikeAgenda {
 	@Id @GeneratedValue
 	private Long id;
 
+	@Setter
 	@ManyToOne
 	@JoinColumn(name = "agenda_id")
 	private Agenda agenda;

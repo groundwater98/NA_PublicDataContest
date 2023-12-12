@@ -10,3 +10,5 @@ export const theme = {
 export const {maxWidth, maxHeight} = Dimensions.get('screen');
 
 export const ip = "192.168.0.9"
+// export const ip = "172.20.1.241"
+
